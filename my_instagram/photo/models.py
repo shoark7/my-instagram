@@ -16,3 +16,4 @@ class PhotoTag(models.Model):
 class PhotoReply(models.Model):
     photo = models.ForeignKey(Photo)
     author = models.ForeignKey(MyUser)
+    reply = models.TextField(max_length=150)
