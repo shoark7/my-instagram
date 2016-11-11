@@ -22,6 +22,15 @@ class Photo(models.Model):
         related_name='photo_set_like_users'
     )
 
+    def to_dict(self):
+        ret = {
+            'id': self.id,
+            'image': self.photo.url,
+            'author': self.author.id,
+            'content': self.content
+        }
+        return ret
+
 
 class PhotoTag(models.Model):
     title = models.CharField(max_length=20)
