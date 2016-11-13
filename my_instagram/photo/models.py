@@ -21,13 +21,18 @@ class Photo(models.Model):
         through='PhotoLike',
         related_name='photo_set_like_users'
     )
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.content
 
     def to_dict(self):
         ret = {
             'id': self.id,
             'image': self.photo.url,
             'author': self.author.id,
-            'content': self.content
+            'content': self.content,
+            'commentList': [comment.to_dict() for comment in self.photocomment_set.all()],
         }
         return ret
 
@@ -40,6 +45,15 @@ class PhotoComment(models.Model):
     photo = models.ForeignKey(Photo)
     author = models.ForeignKey(MyUser)
     reply = models.TextField(max_length=150)
+
+    def to_dict(self):
+        ret = {
+            'id': self.id,
+            'photo': self.photo.id,
+            'author': self.author.id,
+            'reply': self.reply,
+        }
+        return ret
 
 
 class PhotoLike(models.Model):

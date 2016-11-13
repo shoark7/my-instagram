@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>사진 리스트</title>
     {% for photo in photos %}
+    {% csrf_token %}
     {{ photo.photo.url }}
     <img src="{{ photo.photo.url }}" alt="">
     <br>
