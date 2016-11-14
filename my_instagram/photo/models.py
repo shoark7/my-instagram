@@ -1,6 +1,7 @@
 from django.db import models
 from member.models import MyUser
 from django.conf import settings
+from django.urls import reverse
 
 __all__ = [
     'Photo',
@@ -8,7 +9,6 @@ __all__ = [
     'PhotoComment',
     'PhotoLike'
 ]
-
 
 # Create your models here.
 class Photo(models.Model):
@@ -22,6 +22,9 @@ class Photo(models.Model):
         related_name='photo_set_like_users'
     )
     created_date = models.DateTimeField(auto_now_add=True)
+
+    def get_absolute_url(self):
+        return reverse('photo:photo_list')
 
     def __str__(self):
         return self.content

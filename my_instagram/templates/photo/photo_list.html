@@ -6,6 +6,9 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>사진 리스트</title>
+</head>
+<body>
+    <a href="{% url 'photo:photo_add' %}">사진 추가</a><br>
     {% for photo in object_list %}
     {% csrf_token %}
     {{ photo.photo.url }}
@@ -29,8 +32,6 @@
         </span>
     </div>
 
-</head>
-<body>
 
 </body>
 </html>
