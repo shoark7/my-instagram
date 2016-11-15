@@ -25,10 +25,11 @@ apis_patterns = [
 ]
 
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name='base/common.html'), name='base'),
+    # url(r'^$', TemplateView.as_view(template_name='base/common.html'), name='base'),
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(apis_patterns)),
     url(r'^photo/', include('photo.urls.urls', namespace='photo')),
-    url(r'^auth/', include('django.contrib.auth.urls', namespace='auth')),
+    # url(r'^auth/', include('django.contrib.auth.urls', namespace='auth')),
+    url(r'^auth/', include('member.urls', namespace='auth')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
