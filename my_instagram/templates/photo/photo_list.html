@@ -12,7 +12,7 @@
     {% for photo in object_list %}
     {% csrf_token %}
     {{ photo.photo.url }}
-    <img src="{{ photo.photo.url }}" alt="">
+    <a href="{% url 'photo:photo_detail' pk=photo.id %}"><img src="{{ photo.photo.url }}" alt=""></a>
     <br>
     {% endfor %}
 

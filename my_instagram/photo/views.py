@@ -1,12 +1,12 @@
+from django import forms
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseForbidden
+from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import DetailView, ListView
-from django.views.generic.edit import CreateView
+from django.views.generic import DetailView
 from django.views.generic import ListView
-from django.urls import reverse_lazy
-from django import forms
+from django.views.generic.edit import CreateView, FormMixin
 
 from .models import Photo, PhotoComment
 
@@ -56,7 +56,8 @@ class PhotoDetail(View):
         return view(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        pass
+        view = PhotoCommentAdd.as_view()
+        return view(request, *args, **kwargs)
 
 
 # get
@@ -71,16 +72,33 @@ class PhotoDisplay(DetailView):
         # context['form'] =
         return context
 
-
-
 # post
-class CommentCreate(CreateView):
-    model = PhotoComment
-    fields = ['reply']
+class PhotoCommentAdd(FormMixin, DetailView):
+    model = Photo
+    form_class = CommentAddForm
 
-    # 'photo', 'author',
+    def get_success_url(self):
+        return reverse('photo:photo_detail', kwargs={'pk': self.object.pk})
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+        self.object = self.get_object()
+        self.user = request.user
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
-        form.instance.photo  = self.object
-
+        reply = form.cleaned_data.get('reply', '')
+        photo = self.object
+        author = self.user
+        PhotoComment.objects.create(
+            reply=reply,
+            photo=photo,
+            author=author,
+        )
+        return super().form_valid(form)

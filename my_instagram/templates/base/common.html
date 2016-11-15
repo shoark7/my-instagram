@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>기본화면</title>
+</head>
+<body>
+    <h3>무궁한 꿈의 세계로 오신걸 환영합니다. 먼저 로그인을 해야 합니다.</h3>
+    {% if not request.user.is_authenticated %}
+    <a href="{% url 'auth:login' %}">로그인</a>
+    {% else %}
+    <a href="{% url 'auth:logout' %}">로그아웃</a>
+    {% endif %}
+</body>
+</html>

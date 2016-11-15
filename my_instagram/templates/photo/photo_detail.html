@@ -8,9 +8,10 @@
     <title>Photo Detail</title>
 </head>
 <body>
+    <a href="{% url 'photo:photo_list' %}"><div>리스트 보기</div></a>
     <img src="{{ object.photo.url }}" alt="">
     {% for comment in comments %}
-    <p>{{ comment.reply }}</p>
+    <p><span>{{comment.author|truncatechars:'10'}} : </span>{{ comment.reply }}</p>
     {% empty %}
     <h3>사진에 코멘트가 없습니다.</h3>
 
